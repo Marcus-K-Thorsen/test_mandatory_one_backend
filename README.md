@@ -1,3 +1,4 @@
+[![Continous Integration](https://github.com/Marcus-K-Thorsen/test_mandatory_one_backend/actions/workflows/ci.yaml/badge.svg)](https://github.com/Marcus-K-Thorsen/test_mandatory_one_backend/actions/workflows/ci.yaml)
 
 # TO-DO
 - [Generate random addresses](https://github.com/Marcus-K-Thorsen/test_mandatory_one_backend/blob/main/src/data/fake_person.py#L79-L95)
