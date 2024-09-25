@@ -1,17 +1,63 @@
-from typing import Union
-
+from typing import Union, Optional
 from fastapi import FastAPI
-from src.controllers.cpr_controller import router as CPR_Router
+from fastapi.middleware.cors import CORSMiddleware
+from src.data.fake_person import FakePerson
 
 app = FastAPI()
+# Setup cors
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True, 
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-app.include_router(CPR_Router)
+# WHY THESE ENDPOINTS?
+# Because the frontend expects them to be defined and to return the data
+# in the format that can be seen in the FakePerson class.
+# https://github.com/arturomorarioja/js_fake_info_frontend/blob/main/index.html#L29-L35
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+@app.get("/person")
+def read_n_people(n: Optional[int] = None):
+    if n is None:
+        n = 1
+    people = []
+    for i in range(n):
+        people.append(FakePerson())
+    return people
 
+@app.get("/cpr")
+def read_cpr():
+    person = FakePerson()
+    return {"CPR": person.CPR}
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.get("/name-gender")
+def read_name_and_gender():
+    person = FakePerson()
+    return {"firstName": person.firstName, "lastName": person.lastName, "gender": person.gender}
+
+@app.get("/name-gender-dob")
+def read_name_and_gender_and_birthday():
+    person = FakePerson()
+    return {"firstName": person.firstName, "lastName": person.lastName, "gender": person.gender, "birthDate": person.birthDate}
+
+@app.get("/cpr-name-gender")
+def read_cpr_name_and_gender():
+    person = FakePerson()
+    return {"CPR": person.CPR, "firstName": person.firstName, "lastName": person.lastName, "gender": person.gender}
+
+@app.get("/cpr-name-gender-dob")
+def read_cpr_name_gender_birthdate():
+    person = FakePerson()
+    return {"CPR": person.CPR, "firstName": person.firstName, "lastName": person.lastName, "gender": person.gender, "birthDate": person.birthDate}
+
+@app.get("/address")
+def read_address():
+    person = FakePerson()
+    return {"address": person.address}
+
+@app.get("/phone")
+def read_phone():
+    person = FakePerson()
+    return {"phoneNumber": person.phoneNumber}
