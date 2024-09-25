@@ -34,6 +34,9 @@ jobs:
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        
       - name: Create .env file
         run: |
           echo "DB_USER=root" > .env
