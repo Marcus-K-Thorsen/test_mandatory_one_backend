@@ -73,10 +73,8 @@ class FakePerson:
         month = self.birthDate[5:7]
         # Get year as the 2nd and 3rd character of the birth date
         year = self.birthDate[2:4]
-        # Three complete random digits
-        random_digits = random.randint(100, 999)
         # Format: DDMMYY-XXXX
-        self.CPR = f"{day}{month}{year}{random_digits}{last_digit}"
+        self.CPR = f"{day}{month}{year}{random.randint(0, 9)}{random.randint(0, 9)}{random.randint(0, 9)}{last_digit}"
 
     def set_address(self):
         """
