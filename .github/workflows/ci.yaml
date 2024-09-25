@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-        
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -31,9 +31,9 @@ jobs:
         ports:
           - 3306:3306
         options: >
-          --health-cmd="mysqladmin ping --silent" 
-          --health-interval=10s 
-          --health-timeout=5s 
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
           --health-retries=3
         env:
           MYSQL_ROOT_PASSWORD: password
@@ -59,11 +59,11 @@ jobs:
       - name: Run SQL Script
         run: |
           mysql -h 127.0.0.1 -u root -p"password" < addresses.sql
-      
+
       - name: Run pytests
         run: |
           pytest
 
       - name: Remove .env file
         run: |
-          rm -f .env 
+          rm -f .env
