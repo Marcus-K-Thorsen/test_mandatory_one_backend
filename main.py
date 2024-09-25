@@ -1,9 +1,11 @@
 from typing import Union
 
 from fastapi import FastAPI
+from src.controllers.cpr_controller import router as CPR_Router
 
 app = FastAPI()
 
+app.include_router(CPR_Router)
 
 @app.get("/")
 def read_root():

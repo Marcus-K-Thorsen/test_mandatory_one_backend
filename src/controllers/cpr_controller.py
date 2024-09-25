@@ -1,15 +1,14 @@
-from typing import Union
+from database import Session, get_db as get_db_session
+from fastapi import APIRouter, Depends, HTTPException
+from src.data.address import PostalCode
 
-from fastapi import FastAPI
+router: APIRouter = APIRouter()
 
-app = FastAPI()
+def get_db():
+    with get_db_session() as session:
+        yield session
 
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@router.get("/cpr")
+def get_cpr(session: Session = Depends(get_db)):
+    addresses = [address.as_dto() for address in session.query(PostalCode).all()]
+    return {"data": addresses}
