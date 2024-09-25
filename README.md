@@ -1,4 +1,9 @@
 
+# TO-DO
+- [Generate random addresses](https://github.com/Marcus-K-Thorsen/test_mandatory_one_backend/blob/main/src/data/fake_person.py#L79-L95)
+- [Generate random phone numbers](https://github.com/Marcus-K-Thorsen/test_mandatory_one_backend/blob/main/src/data/fake_person.py#L97-L106)
+- Unit and integration tests
+
 # Development
 
 ## Virtual environment
