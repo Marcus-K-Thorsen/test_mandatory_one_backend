@@ -24,40 +24,40 @@ def read_n_people(n: Optional[int] = None):
         n = 1
     people = []
     for i in range(n):
-        people.append(FakePerson())
+        people.append(FakePerson.create())
     return people
 
 @app.get("/cpr")
 def read_cpr():
-    person = FakePerson()
+    person = FakePerson.create()
     return {"CPR": person.CPR}
 
 @app.get("/name-gender")
 def read_name_and_gender():
-    person = FakePerson()
+    person = FakePerson.create()
     return {"firstName": person.firstName, "lastName": person.lastName, "gender": person.gender}
 
 @app.get("/name-gender-dob")
 def read_name_and_gender_and_birthday():
-    person = FakePerson()
+    person = FakePerson.create()
     return {"firstName": person.firstName, "lastName": person.lastName, "gender": person.gender, "birthDate": person.birthDate}
 
 @app.get("/cpr-name-gender")
 def read_cpr_name_and_gender():
-    person = FakePerson()
+    person = FakePerson.create()
     return {"CPR": person.CPR, "firstName": person.firstName, "lastName": person.lastName, "gender": person.gender}
 
 @app.get("/cpr-name-gender-dob")
 def read_cpr_name_gender_birthdate():
-    person = FakePerson()
+    person = FakePerson.create()
     return {"CPR": person.CPR, "firstName": person.firstName, "lastName": person.lastName, "gender": person.gender, "birthDate": person.birthDate}
 
 @app.get("/address")
 def read_address():
-    person = FakePerson()
+    person = FakePerson.create()
     return {"address": person.address}
 
 @app.get("/phone")
 def read_phone():
-    person = FakePerson()
+    person = FakePerson.create()
     return {"phoneNumber": person.phoneNumber}
