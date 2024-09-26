@@ -108,4 +108,25 @@ class FakePerson:
         # https://github.com/arturomorarioja/js_fake_info_frontend/blob/main/js/script.js#L79-L82
         # Also, if you need help making the method generating the phone number,
         # look at: https://github.com/arturomorarioja/fake_info/blob/main/src/FakeInfo.php#L196-L205
-        self.phoneNumber = "4512345678"
+        PHONE_PREFIXES = [
+        "2", "30", "31", "40", "41", "42", "50", "51", "52", "53", "60", "61", "71", 
+        "81", "91", "92", "93", "342", "344", "345", "346", "347", "348", "349", 
+        "356", "357", "359", "362", "365", "366", "389", "398", "431", "441", 
+        "462", "466", "468", "472", "474", "476", "478", "485", "486", "488", 
+        "489", "493", "494", "495", "496", "498", "499", "542", "543", "545", 
+        "551", "552", "556", "571", "572", "573", "574", "577", "579", "584", 
+        "586", "587", "589", "597", "598", "627", "629", "641", "649", "658", 
+        "662", "663", "664", "665", "667", "692", "693", "694", "697", "771", 
+        "772", "782", "783", "785", "786", "788", "789", "826", "827", "829"
+    ]
+    
+        # Select a random phone prefix from the predefined list
+        phone = random.choice(PHONE_PREFIXES)
+    
+        # Calculate the remaining length needed to complete 8 digits
+        prefix_length = len(phone)
+        for _ in range(8 - prefix_length):
+            phone += str(random.randint(0, 9))  # Append random digits
+    
+        self.phone_number = phone
+
