@@ -5,19 +5,24 @@ import random
 # Load the data from the json file
 with open('./src/data/person-names.json') as f:
     data = json.load(f)
+    
+
 
 class FakePerson:
     """
         FakePerson class is used to generate fake person data 
         for testing purposes.
     """
-
-    def __init__(self):
+    
+    def create():
+        randomPerson = random.choice(data['persons'])
+        return FakePerson(randomPerson=randomPerson)
+    
+    def __init__(self, randomPerson):
         """
             The constructor automatically generates
             the data when an instance of the class is created.
         """
-        randomPerson = random.choice(data['persons'])
         self.firstName = randomPerson['firstName']
         self.lastName = randomPerson['lastName']
         self.gender = randomPerson['gender']
