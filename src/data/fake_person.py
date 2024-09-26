@@ -1,6 +1,11 @@
 # Inspired by https://github.com/arturomorarioja/fake_info/blob/main/src/FakeInfo.php
 import json
 import random
+import string
+from src.data.address import PostalCode
+from sqlalchemy import select, func
+from random import randint, choice
+from database import get_db
 
 # Load the data from the json file
 with open('./src/data/person-names.json') as f:
@@ -76,23 +81,44 @@ class FakePerson:
         # Format: DDMMYY-XXXX
         self.CPR = f"{day}{month}{year}{random.randint(0, 9)}{random.randint(0, 9)}{random.randint(0, 9)}{last_digit}"
 
+    def get_random_postal_code(self, session):
+        """Fetch a random postal code and town name from the database."""
+        # Using SQLAlchemy to select a random row from the addresses table
+        stmt = select(PostalCode).order_by(func.rand()).limit(1)
+        result = session.execute(stmt).scalar_one()
+        return result
+    
+    def get_random_street_name(self, max_length=6) -> str:
+        """
+        Generates a random street name containing only letters.
+        The string will have a maximum of 6 letters, with the first letter capitalized.
+        """
+        # Ensure we get a string between 1 and max_length
+        length = random.randint(1, max_length)
+        
+        # Generate random lowercase letters for the remaining part
+        random_letters = ''.join(random.choices(string.ascii_lowercase, k=length - 1))
+        
+        # Return the street name with the first letter capitalized
+        return random.choice(string.ascii_uppercase) + random_letters
+    
+
     def set_address(self):
         """
-            Set the address of the person.
+        Set the address of the person, using a random postal code and town from the database.
         """
-        # the address variable must be named 'address'
-        # to match how the frontend expects the data
-        # https://github.com/arturomorarioja/js_fake_info_frontend/blob/main/js/script.js#L70-L76
-        # Also, if you need help making the method generating the address,
-        # look at: https://github.com/arturomorarioja/fake_info/blob/main/src/FakeInfo.php#L108-L162
-        self.address = {
-            "street": "Random street",
-            "number": 1,
-            "floor": 1,
-            "door": "th",
-            "postal_code": "2222",
-            "town_name": "Random town name",
-        }
+        # Fetch random postal code and town name from the database
+        with get_db() as session:
+            random_postal_code = self.get_random_postal_code(session)
+
+            self.address = {
+                "street": self.get_random_street_name(),
+                "number": randint(1, 999),
+                "floor": "st" if (floor := random.randint(0, 99)) == 0 else floor,
+                "door": choice(['th', 'tv', 'mf', str(randint(1, 50))]),
+                "postal_code": random_postal_code.cPostalCode,
+                "town_name": random_postal_code.cTownName,
+            }
 
     def set_phone_number(self):
         """
