@@ -24,7 +24,16 @@ def read_n_people(n: Optional[int] = None):
         n = 1
     people = []
     for i in range(n):
-        people.append(FakePerson.create())
+        person = FakePerson.create()
+        people.append({
+            "CPR": person.CPR,
+            "firstName": person.firstName,
+            "lastName": person.lastName,
+            "gender": person.gender,
+            "birthDate": person.birthDate,
+            "address": person.address,
+            "phoneNumber": person.phone_number 
+            })
     return people
 
 @app.get("/cpr")
@@ -60,4 +69,4 @@ def read_address():
 @app.get("/phone")
 def read_phone():
     person = FakePerson.create()
-    return {"phoneNumber": person.phoneNumber}
+    return {"phoneNumber": person.phone_number}
