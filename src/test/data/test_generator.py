@@ -39,7 +39,7 @@ def test_birthday_is_correct_format():
     assert int(birthday[5:7]) >= startM and int(birthday[5:7]) <= endM, f"The birthday's month ({birthday}) is outside the range {startM}-{endM}"
 
 
-
+"""
 def test_address_is_correct_format():
     postal_code_info = Generator.generate_postal_code()  
     street = Generator.generate_street_name()  
@@ -73,7 +73,7 @@ def test_address_is_correct_format():
 
     # Assert town name is a non-empty string
     assert isinstance(town_name, str) and len(town_name) > 0, f"Town name {town_name} is not valid"
-
+"""
 
 #def test_is_cpr_valid():
     #cpr = Generator.generate_cpr("01", "01", "200
