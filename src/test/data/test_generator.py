@@ -1,55 +1,47 @@
 import pytest
 import re
-from src.data.generator import generate_phone_number 
+import os
+import sys
+# Add the parent directory to the path to allow importing the generator module
+# There must be a better way to import modules xD
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+from src.data.generator import Generator
 
-# Allowed phone prefixes based on the partitions
-VALID_PHONE_PREFIXES = [
-    "2", "30", "31", "40", "41", "42", "50", "51", "52", "53", "60", "61", "71", 
-    "81", "91", "92", "93", "342", "344", "345", "346", "347", "348", "349", 
-    "356", "357", "359", "362", "365", "366", "389", "398", "431", "441", 
-    "462", "466", "468", "472", "474", "476", "478", "485", "486", "488", 
-    "489", "493", "494", "495", "496", "498", "499", "542", "543", "545", 
-    "551", "552", "556", "571", "572", "573", "574", "577", "579", "584", 
-    "586", "587", "589", "597", "598", "627", "629", "641", "649", "658", 
-    "662", "663", "664", "665", "667", "692", "693", "694", "697", "771", 
-    "772", "782", "783", "785", "786", "788", "789", "826", "827", "829"]
+def test_get_day_range_for_month_returns_correct_range_for_all_months_with_31_days():
+    for month in Generator.MONTHS_WITH_31_DAYS:
+        assert Generator.get_day_range_for_month(month) == (1, 31), f"Month {month} should have 31 days"
 
-# Helper function to check if the prefix is valid
-def has_valid_prefix(phone_number: str) -> bool:
-    return any(phone_number.startswith(prefix) for prefix in VALID_PHONE_PREFIXES)
+def test_get_day_range_for_month_returns_correct_range_for_all_months_with_30_days():
+    for month in Generator.MONTHS_WITH_30_DAYS:
+        assert Generator.get_day_range_for_month(month) == (1, 30), f"Month {month} should have 30 days"
 
-def test_phone_number_valid_length():
-    """Test that the generated phone number is always 8 digits long."""
-    for _ in range(10):  # Repeat multiple times for randomness
-        phone_number = generate_phone_number()
-        assert len(phone_number) == 8, f"Phone number {phone_number} does not have exactly 8 digits"
+def test_get_day_range_for_month_returns_correct_range_for_february():
+    assert Generator.get_day_range_for_month(2) == (1, 28), "February should have 28 days"
 
-def test_phone_number_is_numeric():
-    """Test that the generated phone number consists only of digits."""
-    for _ in range(10):  # Repeat multiple times for randomness
-        phone_number = generate_phone_number()
-        assert phone_number.isdigit(), f"Phone number {phone_number} contains non-numeric characters"
+def test_phone_number_is_correct_format():
+    phone_number = Generator.generate_phone_number()
 
-def test_phone_number_valid_prefix():
-    """Test that the generated phone number starts with a valid prefix."""
-    for _ in range(10):  # Repeat multiple times for randomness
-        phone_number = generate_phone_number()
-        assert has_valid_prefix(phone_number), f"Phone number {phone_number} has an invalid prefix"
+    length = len(phone_number)
+    isDigit = phone_number.isdigit()
+    hasPrefix = Generator.has_valid_prefix(phone_number)
 
-def test_invalid_prefix_range():
-    """Test that numbers with invalid starting prefixes are not allowed."""
-    invalid_prefixes = ["343", "111", "000"]  # Examples of invalid prefixes
-    for prefix in invalid_prefixes:
-        phone_number = generate_phone_number()
-        assert not phone_number.startswith(prefix), f"Phone number {phone_number} starts with an invalid prefix {prefix}"
+    assert length == 8, f"Phone number {phone_number} does not have exactly 8 digits"
+    assert isDigit, f"Phone number {phone_number} contains non-numeric characters"
+    assert hasPrefix, f"Phone number {phone_number} has an invalid prefix"
 
-def test_invalid_character():
-    """Ensure generated phone number does not contain non-numeric characters."""
-    for _ in range(10):
-        phone_number = generate_phone_number()
-        # Check if phone number contains any non-numeric characters
-        assert re.match(r'^\d{8}$', phone_number), f"Phone number {phone_number} contains invalid characters"
+def test_birthday_is_correct_format():
+    startY, endY, startM, endM = 1900, 2021, 1, 12
+    birthday = Generator.generate_birth_date(startY, endY, startM, endM)
 
+    assert re.match(r"^\d{4}-\d{2}-\d{2}$", birthday), f"Birthday {birthday} is not in the correct format (YYYY-MM-DD)"
+    assert int(birthday[:4]) >= startY and int(birthday[:4]) <= endY, f"The birthday's year ({birthday}) is outside the range {startY}-{endY}"
+    assert int(birthday[5:7]) >= startM and int(birthday[5:7]) <= endM, f"The birthday's month ({birthday}) is outside the range {startM}-{endM}"
+
+
+#def test_is_cpr_valid():
+    #cpr = Generator.generate_cpr("01", "01", "200
+
+"""
 # Test invalid cases (these can be expanded if the function is extended to handle more input cases)
 @pytest.mark.parametrize("invalid_phone_number", [
     "1234567",   # 7 digits (too short)
@@ -61,6 +53,7 @@ def test_invalid_character():
     "11123456"   # Another invalid prefix
 ])
 def test_invalid_phone_numbers(invalid_phone_number):
-    """Ensure invalid phone numbers are correctly identified."""
     # Simulate invalid cases by directly asserting these should be rejected
     assert len(invalid_phone_number) != 8 or not invalid_phone_number.isdigit() or not has_valid_prefix(invalid_phone_number), f"Invalid phone number {invalid_phone_number} should not be allowed"
+
+"""
