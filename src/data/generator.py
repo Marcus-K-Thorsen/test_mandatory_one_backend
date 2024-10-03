@@ -2,6 +2,7 @@ import random
 import string
 from database import Session
 from src.data.address import PostalCode
+from database import get_db
 
 VALID_PHONE_PREFIXES = [
     "2", "30", "31", "40", "41", "42", "50", "51", "52", "53", "60", "61", "71", 
@@ -101,10 +102,11 @@ class Generator:
         """Check if a phone number has a valid prefix."""
         return any(phone_number.startswith(prefix) for prefix in VALID_PHONE_PREFIXES)
 
-    def generate_postal_code(session: Session) -> dict:
+    def generate_postal_code() -> dict:
         """Fetch a random postal code and town name from the database."""
         # Using SQLAlchemy to select a random row from the addresses table
-        postal_code: PostalCode = random.choice(session.query(PostalCode).all)
+        with get_db() as session:   
+            postal_code: PostalCode = random.choice(session.query(PostalCode).all)
         return postal_code.as_dto
 
     def generate_street_name(max_length=6) -> str:

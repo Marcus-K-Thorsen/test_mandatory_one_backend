@@ -2,6 +2,7 @@ import pytest
 import re
 import os
 import sys
+from random import randint, choice
 # Add the parent directory to the path to allow importing the generator module
 # There must be a better way to import modules xD
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
@@ -36,6 +37,42 @@ def test_birthday_is_correct_format():
     assert re.match(r"^\d{4}-\d{2}-\d{2}$", birthday), f"Birthday {birthday} is not in the correct format (YYYY-MM-DD)"
     assert int(birthday[:4]) >= startY and int(birthday[:4]) <= endY, f"The birthday's year ({birthday}) is outside the range {startY}-{endY}"
     assert int(birthday[5:7]) >= startM and int(birthday[5:7]) <= endM, f"The birthday's month ({birthday}) is outside the range {startM}-{endM}"
+
+
+
+def test_address_is_correct_format():
+    postal_code_info = Generator.generate_postal_code()  
+    street = Generator.generate_street_name()  
+    
+    number = randint(1, 999)  # Randomly generate the house number
+    floor = "st" if (floor_value := randint(0, 99)) == 0 else floor_value  # Floor is 'st' for ground, or a number
+    door = choice(['th', 'tv', 'mf', str(randint(1, 50))])  # Randomly choose or generate the door
+
+    # Assert street is a valid format (starts with an uppercase letter, and the rest lowercase)
+    assert re.match(r"^[A-Z][a-z]*$", street), f"Street {street} is not in the correct format (First letter uppercase, rest lowercase)"
+
+    # Assert number is within the valid range
+    assert 1 <= number <= 999, f"House number {number} is outside the valid range (1-999)"
+
+    # Assert floor is either 'st' or a number between 1 and 99
+    if isinstance(floor, str):
+        assert floor == "st", f"Floor {floor} should be 'st' for ground floor"
+    else:
+        assert 1 <= floor <= 99, f"Floor {floor} is outside the valid range (1-99)"
+
+    # Assert door is one of the valid options ('th', 'tv', 'mf', or a number between 1 and 50)
+    valid_door_choices = ['th', 'tv', 'mf'] + [str(i) for i in range(1, 51)]
+    assert door in valid_door_choices, f"Door {door} is not in the valid choices (th, tv, mf, or 1-50)"
+
+    # Validate postal code and town name
+    postal_code = postal_code_info.get("cPostalCode")
+    town_name = postal_code_info.get("cTownName")
+
+    # Assert postal code is a 4-digit numeric string
+    assert re.match(r"^\d{4}$", postal_code), f"Postal code {postal_code} is not in the correct format (4 digits)"
+
+    # Assert town name is a non-empty string
+    assert isinstance(town_name, str) and len(town_name) > 0, f"Town name {town_name} is not valid"
 
 
 #def test_is_cpr_valid():
