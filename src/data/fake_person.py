@@ -2,6 +2,7 @@
 import json
 import random
 import string
+import re
 from src.data.address import PostalCode
 from sqlalchemy import select, func
 from random import randint, choice
