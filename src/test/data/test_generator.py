@@ -38,8 +38,6 @@ def test_birthday_is_correct_format():
     assert int(birthday[:4]) >= startY and int(birthday[:4]) <= endY, f"The birthday's year ({birthday}) is outside the range {startY}-{endY}"
     assert int(birthday[5:7]) >= startM and int(birthday[5:7]) <= endM, f"The birthday's month ({birthday}) is outside the range {startM}-{endM}"
 
-
-
 def test_street_is_correct_format():
      # Arrange
     street = Generator.generate_street_name()

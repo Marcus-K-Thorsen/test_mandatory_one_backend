@@ -39,6 +39,25 @@ class FakePerson:
         self.set_address()
         self.set_phone_number()
 
+    # Validation Functions
+    def validate_first_name(name: str) -> bool:
+        """
+        Validate the first name based on the rules:
+        - Must consist of alphabetic Danish strings.
+        - Can contain one space, one dot (at the end), or one hyphen.
+        - Capital letters should only be used at the beginning, after a hyphen or space.
+        """
+        return (re.match(r"^[A-ZÆØÅ][a-zæøå]*([ -][A-ZÆØÅ][a-zæøå]*)*\.?$", name) is not None)
+
+
+    def validate_last_name(name: str) -> bool:
+        """
+        Validate the last name based on the rules:
+        - Must consist of alphabetic Danish strings.
+        - Capital letters should only be used at the start.
+        """
+        return (re.match(r"^[A-ZÆØÅ][a-zæøå]*$", name) is not None)
+
     def set_birth_date(self):
         """
             Set the birth date of the person.
