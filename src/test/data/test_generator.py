@@ -1,23 +1,6 @@
 import pytest
 import re
-import os
-import sys
-from random import randint, choice
-# Add the parent directory to the path to allow importing the generator module
-# There must be a better way to import modules xD
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 from src.data.generator import Generator
-
-def test_get_day_range_for_month_returns_correct_range_for_all_months_with_31_days():
-    for month in Generator.MONTHS_WITH_31_DAYS:
-        assert Generator.get_day_range_for_month(month) == (1, 31), f"Month {month} should have 31 days"
-
-def test_get_day_range_for_month_returns_correct_range_for_all_months_with_30_days():
-    for month in Generator.MONTHS_WITH_30_DAYS:
-        assert Generator.get_day_range_for_month(month) == (1, 30), f"Month {month} should have 30 days"
-
-def test_get_day_range_for_month_returns_correct_range_for_february():
-    assert Generator.get_day_range_for_month(2) == (1, 28), "February should have 28 days"
 
 def test_phone_number_is_correct_format():
     phone_number = Generator.generate_phone_number()
@@ -30,13 +13,59 @@ def test_phone_number_is_correct_format():
     assert isDigit, f"Phone number {phone_number} contains non-numeric characters"
     assert hasPrefix, f"Phone number {phone_number} has an invalid prefix"
 
-def test_birthday_is_correct_format():
-    startY, endY, startM, endM = 1900, 2021, 1, 12
-    birthday = Generator.generate_birth_date(startY, endY, startM, endM)
 
-    assert re.match(r"^\d{4}-\d{2}-\d{2}$", birthday), f"Birthday {birthday} is not in the correct format (YYYY-MM-DD)"
-    assert int(birthday[:4]) >= startY and int(birthday[:4]) <= endY, f"The birthday's year ({birthday}) is outside the range {startY}-{endY}"
-    assert int(birthday[5:7]) >= startM and int(birthday[5:7]) <= endM, f"The birthday's month ({birthday}) is outside the range {startM}-{endM}"
+@pytest.mark.parametrize("month_no, expected", [
+    (1, (1, 31)), 
+    (2, (1, 28)),
+    (3, (1, 31)), 
+    (4, (1, 30)),
+    (5, (1, 31)), 
+    (6, (1, 30)),
+    (7, (1, 31)), 
+    (8, (1, 31)),
+    (9, (1, 30)), 
+    (10, (1, 31)),
+    (11, (1, 30)), 
+    (12, (1, 31))
+])
+def test_get_day_range_for_month_returns_valid_range(month_no, expected):
+    assert Generator.get_day_range_for_month(month_no) == expected, f"Month {month_no} should have {expected[1]} days"
+
+
+@pytest.mark.parametrize("date_ranges, expected", [
+    ({"startY": 1900, "endY": 2021, "startM": 1, "endM": 12}, r"^\d{4}-\d{2}-\d{2}$"),
+    ({"startY": 1901, "endY": 2020, "startM": 2, "endM": 11}, r"^\d{4}-\d{2}-\d{2}$"),
+])
+def test_birthday_is_correct_format(date_ranges, expected):
+    birthday = Generator.generate_birth_date(
+        date_ranges["startY"], 
+        date_ranges["endY"], 
+        date_ranges["startM"], 
+        date_ranges["endM"]
+    )
+    assert re.match(expected, birthday), f"Birthday {birthday} is not in the correct format (YYYY-MM-DD)"
+
+
+@pytest.mark.parametrize("date_ranges", [
+    ({"startY": 1900, "endY": 2021, "startM": 1, "endM": 12}), 
+    ({"startY": 1901, "endY": 2020, "startM": 2, "endM": 11})
+])
+def test_birthday_is_within_range(date_ranges):
+    birthday = Generator.generate_birth_date(
+        date_ranges["startY"], 
+        date_ranges["endY"], 
+        date_ranges["startM"], 
+        date_ranges["endM"]
+    )
+    
+    generated_year = int(birthday[:4])
+    generated_month = int(birthday[5:7])
+    generated_day = int(birthday[8:10])
+    
+    assert generated_year >= date_ranges["startY"] and generated_year <= date_ranges["endY"], f"The birthday's year ({birthday}) is outside the range {date_ranges['startY']}-{date_ranges['endY']}"
+    assert generated_month >= date_ranges["startM"] and generated_month <= date_ranges["endM"], f"The birthday's month ({birthday}) is outside the range {date_ranges['startM']}-{date_ranges['endM']}"
+    assert generated_day >= 1 and generated_day <= 31, f"The birthday's day ({birthday}) is outside the range 1-31"
+
 
 def test_street_is_correct_format():
      # Arrange
