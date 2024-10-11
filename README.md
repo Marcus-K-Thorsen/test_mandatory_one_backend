@@ -60,6 +60,11 @@ Run with watcher (https://pypi.org/project/pytest-watch/)
 ptw
 ```
 
+Run coverage report (https://coverage.readthedocs.io/en/7.6.2/index.html)
+```
+bash coverage.sh
+```
+
 ## Frontend
 1. Go to https://github.com/niiicolai/js_fake_info_frontend and download the repository.
 2. Download the 'Express' plugin or another web-server plugin for visual code.
