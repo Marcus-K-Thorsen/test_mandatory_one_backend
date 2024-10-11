@@ -5,6 +5,7 @@ import string
 from src.models.address import PostalCode
 from src.models.database import get_db
 from src.data.generator import Generator
+from src.generators.generate_first_name import GenerateFirstName
 from sqlalchemy import select, func
 from random import randint, choice
 
@@ -44,7 +45,7 @@ class FakePerson:
         startMonth = options.get("birthDaySettings", {}).get("startMonth", 1)
         endMonth = options.get("birthDaySettings", {}).get("endMonth", 12)
         
-        self.firstName = Generator.generate_first_name(personList)
+        self.firstName = GenerateFirstName(personList).generate()
         self.lastName = Generator.generate_last_name(personList)
         self.gender = Generator.generate_gender(personList)
         self.birthDate = Generator.generate_birth_date(startYear, endYear, startMonth, endMonth)
