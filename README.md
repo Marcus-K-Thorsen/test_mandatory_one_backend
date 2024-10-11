@@ -1,14 +1,27 @@
 [![Continous Integration](https://github.com/Marcus-K-Thorsen/test_mandatory_one_backend/actions/workflows/ci.yaml/badge.svg)](https://github.com/Marcus-K-Thorsen/test_mandatory_one_backend/actions/workflows/ci.yaml)
 
 # Getting started
-Open the terminal and run
+1. Install the project
 ```bash
 ./install.sh
 ```
 
-# Server
+2. Setup .env (replace host, port, username and password if necessary)
+```bash
+cp .env.example .env
+```
 
-Start the backend server
+3. Setup MySQL (replace host, username and password if necessary)
+```bash
+mysql -h 127.0.0.1 -u root -p"password" < addresses.sql
+```
+
+4. Activate virtual environment
+```bash
+source venv/bin/activate 2>/dev/null || venv\Scripts\activate 2>/dev/null || source venv/Scripts/activate 2>/dev/null && echo "Virtual environment activated." || echo "Failed to activate virtual environment."
+```
+
+5. Start Server
 ```bash
 fastapi dev main.py
 ```
@@ -72,7 +85,7 @@ ptw
 
 Generate coverage report (https://coverage.readthedocs.io/en/7.6.2/index.html)
 ```bash
-bash coverage.sh
+./coverage.sh
 ```
 
 # Frontend
