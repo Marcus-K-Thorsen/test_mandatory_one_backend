@@ -26,6 +26,15 @@ source venv/bin/activate 2>/dev/null || venv\Scripts\activate 2>/dev/null || sou
 fastapi dev main.py
 ```
 
+# CI Flow
+The CI flow is defined in [`ci.yaml`](https://github.com/Marcus-K-Thorsen/test_mandatory_one_backend/blob/main/.github/workflows/ci.yaml)
+
+Features:
+- Unit Test
+- Database Integration Test
+- Postman API Test
+- Cypress E2E Test
+
 # Virtual environment
 Create a virtual environment and activate it.
 Note: This is only necessary when you setup the project.
