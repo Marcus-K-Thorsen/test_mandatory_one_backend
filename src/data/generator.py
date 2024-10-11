@@ -104,10 +104,12 @@ class Generator:
 
     def generate_postal_code() -> dict:
         """Fetch a random postal code and town name from the database."""
-        # Using SQLAlchemy to select a random row from the addresses table
-        with get_db() as session:   
-            postal_code: PostalCode = random.choice(session.query(PostalCode).all)
-        return postal_code.as_dto
+        with get_db() as session:
+            postal_codes = session.query(PostalCode).all()
+            if not postal_codes:  
+                raise ValueError("No postal codes available in the database.")
+            postal_code: PostalCode = random.choice(postal_codes)  
+        return postal_code.as_dto()  
 
     def generate_street_name(max_length=6) -> str:
         """
