@@ -34,7 +34,7 @@ jobs:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_ROOT_PASSWORD: password
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -57,6 +57,7 @@ jobs:
           echo "DB_NAME=addresses" >> .env
           echo "DB_HOST=127.0.0.1" >> .env
           echo "DB_PORT=3306" >> .env
+          echo "DB_PASSWORD=password" >> .env
 
       - name: Wait for MySQL to be ready
         run: |
