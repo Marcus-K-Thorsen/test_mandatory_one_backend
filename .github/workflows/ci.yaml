@@ -87,6 +87,35 @@ jobs:
       - name: Run Postman collection (API tests)
         run: newman run ./postman/TestMandatory1.postman_collection.json
 
+      - name: Clone frontend repository
+        uses: actions/checkout@v2
+        with:
+          repository: niiicolai/js_fake_info_frontend
+          path: frontend
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+      
+      - name: Start frontend server
+        run: |
+          cd frontend
+          npm start &
+      
+      - name: Wait for frontend to be ready
+        run: sleep 10
+
+      - name: Install Cypress
+        run: |
+          cd frontend
+          npm install cypress
+
+      - name: Run Cypress tests
+        run: |
+          cd frontend
+          npx cypress run
+
       - name: Remove .env file
         run: |
           rm -f .env
