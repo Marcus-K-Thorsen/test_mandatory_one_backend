@@ -66,6 +66,27 @@ def test_birthday_is_within_range(date_ranges):
     assert generated_month >= date_ranges["startM"] and generated_month <= date_ranges["endM"], f"The birthday's month ({birthday}) is outside the range {date_ranges['startM']}-{date_ranges['endM']}"
     assert generated_day >= 1 and generated_day <= 31, f"The birthday's day ({birthday}) is outside the range 1-31"
 
+"""
+@pytest.mark.parametrize("name", [
+    "",
+    "Anne Lise ",
+    "Anne..Lise",
+    "Ann@",
+    "324543",
+    "anne",
+])
+def test_validate_last_name_invalid(name):
+    assert FakePerson.validate_last_name(name) == False
+
+@pytest.mark.parametrize("name", [
+    "Simonsen",
+    "Christoffersen",
+    "Kjær",
+])
+def test_validate_last_name_valid(name):
+    assert FakePerson.validate_last_name(name) == True
+"""
+
 
 def test_street_is_correct_format():
      # Arrange
