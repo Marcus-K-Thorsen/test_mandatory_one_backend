@@ -1,5 +1,7 @@
 import random
 import string
+import re
+
 from src.models.address import PostalCode
 from src.models.database import Session
 from src.models.database import get_db
@@ -84,6 +86,75 @@ class Generator:
         
         return f"{day}{month}{year}{last_three_digits}{last_digit}"
 
+    def generate_first_name(personList: list) -> str:
+        """Generate a random first name from the predefined list."""
+        # Throw an error if the list is empty
+        if not personList: raise ValueError("The list is empty.")
+        
+        # Throw an error if the objects in the list
+        # do not have the required keys
+        if not all('firstName' in person for person in personList):
+            raise ValueError("The list does not contain the required keys [firstName].")
+        
+        # Throw an error if the format of the first name
+        # doesn't follow the rules
+        # - Must consist of alphabetic Danish strings.
+        # - Can contain one space, one dot (at the end), or one hyphen.
+        # - Capital letters should only be used at the beginning, after a hyphen or space.
+        if not all(re.match(r"^[A-ZÆØÅ][a-zæøå]*([ -][A-ZÆØÅ][a-zæøå]*)*\.?$", person['firstName']) for person in personList):
+            raise ValueError("The first name does not follow the rules.")
+        
+        # Get a random person from the list        
+        randomPerson = random.choice(personList)
+        
+        # Return the first name of the random person
+        return randomPerson['firstName']
+    
+    def generate_last_name(personList: list) -> str:
+        """Generate a random last name from the predefined list."""
+        # Throw an error if the list is empty
+        if not personList: raise ValueError("The list is empty.")
+        
+        # Throw an error if the objects in the list
+        # do not have the required keys
+        if not all('lastName' in person for person in personList):
+            raise ValueError("The list does not contain the required keys [lastName].")
+        
+        # Throw an error if the format of the last name
+        # doesn't follow the rules
+        # - Must consist of alphabetic Danish strings.
+        # - Capital letters should only be used at the start.
+        if not all(re.match(r"^[A-ZÆØÅ][a-zæøå]*$", person['lastName']) for person in personList):
+            raise ValueError("The last name does not follow the rules.")
+
+        # Get a random person from the list
+        randomPerson = random.choice(personList)
+        
+        # Return the last name of the random person
+        return randomPerson['lastName']
+    
+    def generate_gender(personList: list) -> str:
+        """Generate a random last name from the predefined list."""
+        # Throw an error if the list is empty
+        if not personList: raise ValueError("The list is empty.")
+        
+        # Throw an error if the objects in the list
+        # do not have the required keys
+        if not all('gender' in person for person in personList):
+            raise ValueError("The list does not contain the required keys [gender].")
+        
+        # Throw an error if the format of the last name
+        # doesn't follow the rules
+        # - Must consist of alphabetic Danish strings.
+        # - Capital letters should only be used at the start.
+        if not all(re.match(r"^male$|^female$", person['gender']) for person in personList):
+            raise ValueError("The gender value must be either 'male' or 'female'.")
+
+        # Get a random person from the list
+        randomPerson = random.choice(personList)
+        
+        # Return the gender of the random person
+        return randomPerson['gender']
 
     def generate_phone_number() -> str:
         """Generate a random phone number with a valid prefix."""
@@ -124,3 +195,30 @@ class Generator:
         
         # Return the street name with the first letter capitalized
         return random.choice(string.ascii_uppercase) + random_letters
+    
+    def generate_street_number() -> int:
+        """Generate a random street number between 1 and 999."""
+        return random.randint(1, 999)
+    
+    def generate_floor() -> str:
+        """Generate a random floor number or 'st'."""
+        floor = random.randint(0, 99)
+        return "st" if floor == 0 else floor
+    
+    def generate_door() -> str:
+        """Generate a random door number or type."""
+        return random.choice(['th', 'tv', 'mf', str(random.randint(1, 50))])
+    
+    def generate_address() -> dict:
+        """
+        Set the address of the person, using a random postal code and town from the database.
+        """
+        postal_code_info = Generator.generate_postal_code()
+        return {
+            "street": Generator.generate_street_name(),
+            "number": Generator.generate_street_number(),
+            "floor": Generator.generate_floor(),
+            "door": Generator.generate_door(),
+            "postal_code": postal_code_info.get("cPostalCode"),
+            "town_name": postal_code_info.get("cTownName"),
+        }

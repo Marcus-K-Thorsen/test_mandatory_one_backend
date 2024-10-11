@@ -32,8 +32,8 @@ def read_n_people(n: Optional[int] = None):
             "gender": person.gender,
             "birthDate": person.birthDate,
             "address": person.address,
-            "phoneNumber": person.phone_number 
-            })
+            "phoneNumber": person.phoneNumber 
+        })
     return people
 
 @app.get("/cpr")
@@ -69,4 +69,4 @@ def read_address():
 @app.get("/phone")
 def read_phone():
     person = FakePerson.create()
-    return {"phoneNumber": person.phone_number}
+    return {"phoneNumber": person.phoneNumber}
