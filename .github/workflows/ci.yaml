@@ -74,6 +74,19 @@ jobs:
         run: |
           pytest
 
+      - name: Start API Server
+        run: |
+          fastapi dev main.py &
+
+      - name: Wait for API to be ready
+        run: sleep 10 
+  
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Postman collection (API tests)
+        run: newman run ./postman/TestMandatory1.postman_collection.json
+
       - name: Remove .env file
         run: |
           rm -f .env
