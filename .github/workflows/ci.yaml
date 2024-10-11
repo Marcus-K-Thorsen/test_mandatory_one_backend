@@ -68,7 +68,7 @@ jobs:
 
       - name: Run SQL Script
         run: |
-          mysql -h 127.0.0.1 -u root < addresses.sql
+          mysql -h 127.0.0.1 -u root -p"password" < addresses.sql
 
       - name: Run pytests
         run: |
