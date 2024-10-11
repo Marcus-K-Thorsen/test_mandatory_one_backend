@@ -7,16 +7,23 @@ class GenerateFirstName:
     """Generate a random first name from a predefined list."""
     
     def __init__(self, personList: list):
-        # Throw an error if the list is empty
-        if not personList: raise ValueError("The list is empty.")
+        if not personList: 
+            raise ValueError("personList is not provided.")
         
-        # Throw an error if the list is not a list
-        if not isinstance(personList, list): raise ValueError("The list is not a list.")
+        if not isinstance(personList, list): 
+            raise ValueError("personList must be of type list.")
         
-        # Throw an error if the objects in the list
-        # do not have the required keys
+        if len(personList) == 0: 
+            raise ValueError("personList must contain at least one person.")
+        
+        if not all(isinstance(person, dict) for person in personList):
+            raise TypeError("personList must contain dictionaries.")
+        
         if not all(KEY_NAME in person for person in personList):
-            raise ValueError(f"The list does not contain the required keys ({KEY_NAME}).")
+            raise ValueError(f"The list does not contain the required keys ({KEY_NAME}) or one of the keys is not a string.")
+        
+        if not all(isinstance(person[KEY_NAME], str) for person in personList):
+            raise TypeError("The first name must be a string.")
         
         # Throw an error if the format of the first name
         # doesn't follow the rules:
@@ -30,9 +37,5 @@ class GenerateFirstName:
         self.personList = personList
 
     def generate(self):
-        # Get a random person from the list        
-        randomPerson = random.choice(self.personList)
-        
-        # Return the first name of the random person
-        return randomPerson[KEY_NAME]
+        return random.choice(self.personList)[KEY_NAME]
     
