@@ -1,8 +1,8 @@
 import random
 import string
-from database import Session
-from src.data.address import PostalCode
-from database import get_db
+from src.models.address import PostalCode
+from src.models.database import Session
+from src.models.database import get_db
 
 VALID_PHONE_PREFIXES = [
     "2", "30", "31", "40", "41", "42", "50", "51", "52", "53", "60", "61", "71", 

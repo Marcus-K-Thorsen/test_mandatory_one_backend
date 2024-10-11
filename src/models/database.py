@@ -1,14 +1,13 @@
 import os
-from dotenv import load_dotenv
 from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 from contextlib import contextmanager
+from dotenv import load_dotenv
 
 load_dotenv()
 
 # Define the SQLAlchemy base
 Base = declarative_base()
-
 
 # Configure database connection
 def get_db_connection_string() -> str:

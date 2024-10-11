@@ -3,10 +3,10 @@ import json
 import random
 import string
 import re
-from src.data.address import PostalCode
+from src.models.address import PostalCode
+from src.models.database import get_db
 from sqlalchemy import select, func
 from random import randint, choice
-from database import get_db
 
 # Load the data from the json file
 with open('./src/data/person-names.json') as f:

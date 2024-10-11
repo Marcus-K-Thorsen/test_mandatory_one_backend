@@ -1,8 +1,8 @@
 import pytest
 from sqlalchemy import select, func
-from src.data.address import PostalCode
+from src.models.address import PostalCode
+from src.models.database import get_db
 
-from database import get_db
 def test_can_read_address():
     
     # Fetch random postal code and town name from the database

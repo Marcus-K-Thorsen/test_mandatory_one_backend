@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String
-from database import Base
+from src.models.database import Base
 
 
 class PostalCode(Base):
