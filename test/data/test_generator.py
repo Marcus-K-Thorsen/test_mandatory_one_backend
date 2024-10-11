@@ -3,56 +3,6 @@ import re
 from src.data.generator import Generator
 
 
-@pytest.mark.parametrize("personList", [
-    [{ "firstName": "" }],
-    [{ "firstName": "Anne Lise " }],
-    [{ "firstName": "Anne..Lise" }],
-    [{ "firstName": "Ann@" }],
-    [{ "firstName": "324543" }],
-    [{ "firstName": "anne" }],
-    [{ "": "Anne" }],
-    [{ "wrongKey": "Anne" }],
-])
-def test_generate_first_name_with_invalid_values(personList):
-    with pytest.raises(ValueError):
-        Generator.generate_first_name(personList), f"First name {personList[0].get('firstName')} is not valid"
-
-
-@pytest.mark.parametrize("personList", [
-    [{ "firstName": "Annemette P." }],
-    [{ "firstName": "Anne-Lise N." }],
-    [{ "firstName": "Børge B." }],
-])
-def test_generate_first_name_returns_valid_name(personList):
-    expected = personList[0].get("firstName")
-    assert Generator.generate_first_name(personList) == expected, f"First name {expected} is not valid" 
-    
-
-@pytest.mark.parametrize("personList", [
-    [{ "lastName": "" }],
-    [{ "lastName": "Anne Lise " }],
-    [{ "lastName": "Anne..Lise" }],
-    [{ "lastName": "Ann@" }],
-    [{ "lastName": "324543" }],
-    [{ "lastName": "anne" }],
-    [{ "": "Anne" }],
-    [{ "wrongKey": "Anne" }],
-])
-def test_generate_last_name_with_invalid_values(personList):  
-    with pytest.raises(ValueError):
-        Generator.generate_last_name(personList), f"Last name {personList[0].get('lastName')} is not valid"
-
-
-@pytest.mark.parametrize("personList", [
-    [{ "lastName": "Simonsen" }],
-    [{ "lastName": "Christoffersen" }],
-    [{ "lastName": "Kjær" }],
-])
-def test_generate_last_name_returns_valid_name(personList):
-    expected = personList[0].get("lastName")
-    assert Generator.generate_last_name(personList) == expected, f"Last name {expected} is not valid" 
-    
-
 @pytest.mark.parametrize("month_no, expected", [
     (1, (1, 31)), (2, (1, 28)),
     (3, (1, 31)), (4, (1, 30)),

@@ -58,7 +58,7 @@ def test_generate_first_name_with_inner_boundaries(personList):
     generator = GenerateFirstName(personList)
     firstName = generator.generate()
     
-    assert firstName == personList[0].get("firstName"), f"Epected {personList[0].get('firstName')} to be inside the valid boundaries"
+    assert firstName == personList[0].get("firstName"), f"Expected {personList[0].get('firstName')} to be inside the valid boundaries"
     
 
 @pytest.mark.parametrize("personList", [

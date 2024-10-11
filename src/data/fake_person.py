@@ -2,12 +2,15 @@
 import json
 import random
 import string
+from sqlalchemy import select, func
+from random import randint, choice
 from src.models.address import PostalCode
 from src.models.database import get_db
 from src.data.generator import Generator
 from src.generators.generate_first_name import GenerateFirstName
-from sqlalchemy import select, func
-from random import randint, choice
+from src.generators.generate_last_name import GenerateLastName
+from src.generators.generate_gender import GenerateGender
+
 
 # Load some random names from a json file
 with open('./src/data/person-names.json', 'r', encoding='utf-8') as f:
@@ -46,8 +49,8 @@ class FakePerson:
         endMonth = options.get("birthDaySettings", {}).get("endMonth", 12)
         
         self.firstName = GenerateFirstName(personList).generate()
-        self.lastName = Generator.generate_last_name(personList)
-        self.gender = Generator.generate_gender(personList)
+        self.lastName = GenerateLastName(personList).generate()
+        self.gender = GenerateGender(personList).generate()
         self.birthDate = Generator.generate_birth_date(startYear, endYear, startMonth, endMonth)
         self.birthDay = self.birthDate[8:10]
         self.birthMonth = self.birthDate[5:7]
