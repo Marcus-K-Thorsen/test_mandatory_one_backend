@@ -17,57 +17,7 @@ VALID_PHONE_PREFIXES = [
     "662", "663", "664", "665", "667", "692", "693", "694", "697", "771", 
     "772", "782", "783", "785", "786", "788", "789", "826", "827", "829"]
 
-DATE_CONFIGURATION = {
-    "MONTHS_WITH_31_DAYS": [1, 3, 5, 7, 8, 10, 12],
-    "MONTHS_WITH_30_DAYS": [4, 6, 9, 11],
-    "MONTH_31_RANGE": (1, 31),
-    "MONTH_30_RANGE": (1, 30),
-    "MONTH_28_RANGE": (1, 28)
-}
-
 class Generator:
-
-    def get_day_range_for_month(month: int, dateConfiguration: dict = DATE_CONFIGURATION) -> str:
-        """Get the range of days for a given month."""
-        if month in dateConfiguration["MONTHS_WITH_31_DAYS"]:
-            return dateConfiguration["MONTH_31_RANGE"]
-        elif month in dateConfiguration["MONTHS_WITH_30_DAYS"]:
-            return dateConfiguration["MONTH_30_RANGE"]
-        else:
-            # Leap years are not taken into account
-            # so as not to overcomplicate the code
-            return dateConfiguration["MONTH_28_RANGE"]
-
-    def generate_random_day_for_month(month: int, dateConfiguration: dict = DATE_CONFIGURATION) -> str:
-        """Generate a random day for a given month."""
-        day_range = Generator.get_day_range_for_month(month, dateConfiguration)
-        return random.randint(day_range[0], day_range[1])
-
-    def generate_birth_date(startY: int, endY: int, startM: int, endM: int, dateConfiguration: dict = DATE_CONFIGURATION) -> str:
-        if not isinstance(startY, int): raise TypeError(f"The input 'startY: {startY}' is of type: '{type(startY)}' when it needs to be an 'int'.")
-        if not isinstance(endY, int): raise TypeError(f"The input 'endY: {endY}' is of type: '{type(endY)}' when it needs to be an 'int'.")
-        if not isinstance(startM, int): raise TypeError(f"The input 'startM: {startM}' is of type: '{type(startM)}' when it needs to be an 'int'.")
-        if not isinstance(endM, int): raise TypeError(f"The input 'endM: {endM}' is of type: '{type(endM)}' when it needs to be an 'int'.")
-        
-        if startY > endY: raise ValueError("The start year must be less than or equal to the end year.")
-        if startM > endM: raise ValueError("The start month must be less than or equal to the end month.")
-        
-        if startY < 1: raise ValueError("The start year must be at least 1.")
-        if startM < 1 or startM > 12: raise ValueError("The start month must be between 1 and 12.")
-        
-        if endM < 1 or endM > 12: raise ValueError("The end month must be between 1 and 12.")
-        if endY < 1: raise ValueError("The end year must be at least 1.")
-        
-        # Generate a random year, month, and day
-        year = random.randint(startY, endY)
-        month = random.randint(startM, endM)
-        day = Generator.generate_random_day_for_month(month, dateConfiguration)
-        
-        # Add leading zeros to month and day if needed
-        if len(str(month)) == 1: month = f"0{month}"
-        if len(str(day)) == 1: day = f"0{day}"
-
-        return f'{year}-{month}-{day}'
 
     def generate_cpr(day: str, month: str, year: str, gender: str) -> str:
         # Checking that the given inputs are all strings

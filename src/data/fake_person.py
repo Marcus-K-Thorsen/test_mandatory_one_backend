@@ -7,9 +7,11 @@ from random import randint, choice
 from src.models.address import PostalCode
 from src.models.database import get_db
 from src.data.generator import Generator
+
 from src.generators.generate_first_name import GenerateFirstName
 from src.generators.generate_last_name import GenerateLastName
 from src.generators.generate_gender import GenerateGender
+from src.generators.generate_birthdate import GenerateBirthdate
 
 
 # Load some random names from a json file
@@ -30,10 +32,8 @@ class FakePerson:
         return FakePerson(options={
             "personList": PERSON_LIST,
             "birthDaySettings": {
-                "startYear": 1900,
-                "endYear": 2021,
-                "startMonth": 1,
-                "endMonth": 12
+                "yearRange": (1900, 2024),
+                "monthRange": (1, 12),
             },
         })
     
@@ -43,15 +43,13 @@ class FakePerson:
             the data when an instance of the class is created.
         """
         personList = options.get("personList", PERSON_LIST)
-        startYear = options.get("birthDaySettings", {}).get("startYear", 1900)
-        endYear = options.get("birthDaySettings", {}).get("endYear", 2021)
-        startMonth = options.get("birthDaySettings", {}).get("startMonth", 1)
-        endMonth = options.get("birthDaySettings", {}).get("endMonth", 12)
+        yearRange = options.get("birthDaySettings", {}).get("yearRange", (1900, 2024))
+        monthRange = options.get("birthDaySettings", {}).get("monthRange", (1, 12))
         
         self.firstName = GenerateFirstName(personList).generate()
         self.lastName = GenerateLastName(personList).generate()
         self.gender = GenerateGender(personList).generate()
-        self.birthDate = Generator.generate_birth_date(startYear, endYear, startMonth, endMonth)
+        self.birthDate = GenerateBirthdate(yearRange, monthRange).generate()
         self.birthDay = self.birthDate[8:10]
         self.birthMonth = self.birthDate[5:7]
         self.birthYear = self.birthDate[:4]
