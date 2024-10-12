@@ -11,7 +11,18 @@ without actually having to read any files from the disk. We expect the builtins.
 already work, so all we care about is whether the Person class can handle the data correctly.
 
 Also, this approach ensures we don't have to store multiple corrupted JSON files only meant for testing purposes.
+
+However, while mocking is nice, we should also have tests that read the actual JSON file to ensure that the
+data is valid. This is why we have the test_actual_json_file_in_project_is_valid test function.
 """
+
+def test_actual_json_file_in_project_is_valid():
+    with open('./src/data/person-names.json', 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    
+    assert isinstance(data, dict), "Expected data to be a dictionary"
+    assert 'persons' in data, "Expected data to contain the key 'persons'"
+    assert isinstance(data['persons'], list), "Expected data['persons'] to be a list of persons"
 
 @pytest.mark.parametrize("mockJsonFile", [
     {'persons': [{'firstName': 'Name', 'lastName': 'Name', 'gender': 'male'}]},
