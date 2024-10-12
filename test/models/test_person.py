@@ -25,7 +25,6 @@ def test_person_load_all_with_valid_partitions(mockJsonFile):
         with patch('json.load', return_value=mockJsonFile):
             personList = Person.loadAll(file_path='./src/data/person-names.json', encoding='utf-8', overwriteCache=True)
     
-    
     assert personList == mockJsonFile['persons'], f"Expected {personList} to be a valid list of persons"
     
 
