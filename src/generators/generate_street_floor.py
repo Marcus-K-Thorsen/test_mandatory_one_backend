@@ -14,4 +14,6 @@ class GenerateStreetFloor:
         self.floorRange = floorRange
     
     def generate(self):
-        return "st" if self.floorRange == 0 else random.randint(self.floorRange[0], self.floorRange[1]).__str__()
+        floor = random.randint(self.floorRange[0], self.floorRange[1])
+        
+        return "st" if floor == 0 else floor.__str__()
