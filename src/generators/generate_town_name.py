@@ -1,15 +1,17 @@
-from src.models.address import PostalCode
-from src.models.database import Session
-from src.models.database import get_db
 import random
 
 class GenerateTownName:
     """Generate a town name."""
+    
+    def __init__(self, townNameList: list):
+        if not townNameList: raise ValueError("townNameList is not provided.")
+        if not isinstance(townNameList, list): raise TypeError("townNameList must be of type list.")
+        if len(townNameList) == 0: raise ValueError("townNameList must contain at least one town name.")
+        if not all(isinstance(townName, str) for townName in townNameList): raise TypeError("townNameList must be a list of strings.")
+        if not all(townName for townName in townNameList): raise ValueError("The town name must not be empty.")
+        if not all(townName[0].isupper() for townName in townNameList): raise ValueError("The town name must start with an uppercase letter.")
         
-    def generate(db=get_db(), model=PostalCode):
-        with get_db() as session:
-            data = session.query(model).all()
-            
-            if not data: raise ValueError("No postal codes available in the database.")
-            postal_code: model = random.choice(data)
-        return postal_code.as_dto().get("cTownName")
+        self.townNameList = townNameList
+        
+    def generate(self):
+        return random.choice(self.townNameList)

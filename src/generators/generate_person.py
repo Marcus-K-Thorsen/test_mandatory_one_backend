@@ -1,6 +1,8 @@
 import random
 
 from src.models.person import Person
+from src.models.address import PostalCode
+from src.models.database import get_db
 
 from src.generators.generate_year import GenerateYear
 from src.generators.generate_month import GenerateMonth
@@ -61,19 +63,32 @@ class GeneratePerson:
 
     def generate():
         """Factory method to create a new FakePerson instance."""
+        
+        # Get all postal codes from the database
+        with get_db() as session:
+            postalCodeInstances = session.query(PostalCode).all()
+        
+        # Convert the postal code instances to a list of postal codes
+        postalCodeList = [postalCodeInstance.cPostalCode for postalCodeInstance in postalCodeInstances]
+        # Convert the postal code instances to a list of town names
+        townNameList = [postalCodeInstance.cTownName for postalCodeInstance in postalCodeInstances]
+        
+        # Get a random person from the person-names.json file
         personList = [random.choice(Person.loadAll())]
         
+        # Generate a random date
         year = GenerateYear((1900, 2024)).generate()
         month = GenerateMonth((1, 12)).generate()
         day = GenerateDay(month).generate()
         
+        # Generate the person data
         firstName = GenerateFirstName(personList).generate()
         lastName = GenerateLastName(personList).generate()
         gender = GenerateGender(personList).generate()
         birthDate = GenerateBirthdate(year, month, day).generate()
         CPR = GenerateCPR(gender, {"day": day, "month": month, "year": year}).generate()
         phoneNumber = GeneratePhoneNumber.generate()
-        address = GenerateAddress.generate()
+        address = GenerateAddress.generate(postalCodeList, townNameList)
 
         return GeneratePerson(options={
             "firstName": firstName,

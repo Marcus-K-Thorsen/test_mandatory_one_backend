@@ -1,14 +1,10 @@
-import random
-
-from src.models.person import Person
-from src.data.generator import Generator
-
 from src.generators.generate_street_name import GenerateStreetName
 from src.generators.generate_street_number import GenerateStreetNumber
 from src.generators.generate_street_floor import GenerateStreetFloor
 from src.generators.generate_street_door import GenerateStreetDoor
 from src.generators.generate_postal_code import GeneratePostalCode
 from src.generators.generate_town_name import GenerateTownName
+import random
 
 class GenerateAddress:
     """Generate a fake address."""
@@ -50,8 +46,19 @@ class GenerateAddress:
         self.door = options["door"]
         self.postal_code = options["postal_code"]
         self.town_name = options["town_name"]
+        
+    def getAddress(self):
+        return {
+            "street": self.street,
+            "number": self.number,
+            "floor": self.floor,
+            "door": self.door,
+            "postal_code": self.postal_code,
+            "town_name": self.town_name
+        }
 
-    def generate():
+    @staticmethod
+    def generate(postalCodeList: list, townNameList: list):
         """Factory method to create a new Address instance."""
 
         return GenerateAddress(options={
@@ -59,6 +66,6 @@ class GenerateAddress:
             "number": GenerateStreetNumber().generate(),
             "floor": GenerateStreetFloor().generate(),
             "door": GenerateStreetDoor().generate(),
-            "postal_code": GeneratePostalCode.generate(),
-            "town_name": GenerateTownName.generate()
+            "postal_code": GeneratePostalCode(postalCodeList).generate(),
+            "town_name": GenerateTownName(townNameList).generate()
         })
