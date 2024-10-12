@@ -65,7 +65,11 @@ class GenerateCPR:
         last_three_digits = f"{last_three_digit_first}{last_three_digit_second}{last_three_digit_third}"
         
         last_digit = random.choice(self.male_last_digit_list) if self.gender == "male" else random.choice(self.female_last_digit_list)
-        last_two_year_digits = str(self.year)[2:]
         
-        return f"{self.day}{self.month}{last_two_year_digits}{last_three_digits}{last_digit}"
+        y = str(self.year).zfill(4)
+        m = str(self.month).zfill(2)
+        d = str(self.day).zfill(2)
+        last_two_year_digits = str(y)[2:]
+        
+        return f"{d}{m}{last_two_year_digits}{last_three_digits}{last_digit}"
     
