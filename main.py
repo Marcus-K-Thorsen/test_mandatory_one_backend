@@ -1,10 +1,9 @@
 from typing import Union, Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.data.fake_person import FakePerson
+from src.generators.generate_person import GeneratePerson
 
 app = FastAPI()
-# Setup cors
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -13,18 +12,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# WHY THESE ENDPOINTS?
-# Because the frontend expects them to be defined and to return the data
-# in the format that can be seen in the FakePerson class.
-# https://github.com/arturomorarioja/js_fake_info_frontend/blob/main/index.html#L29-L35
-
 @app.get("/person")
 def read_n_people(n: Optional[int] = None):
     if n is None:
         n = 1
     people = []
     for i in range(n):
-        person = FakePerson.create()
+        person = GeneratePerson.generate()
         people.append({
             "CPR": person.CPR,
             "firstName": person.firstName,
@@ -38,35 +32,34 @@ def read_n_people(n: Optional[int] = None):
 
 @app.get("/cpr")
 def read_cpr():
-    person = FakePerson.create()
-    return {"CPR": person.CPR}
+    return {"CPR": GeneratePerson.generate().CPR}
 
 @app.get("/name-gender")
 def read_name_and_gender():
-    person = FakePerson.create()
+    person = GeneratePerson.generate()
     return {"firstName": person.firstName, "lastName": person.lastName, "gender": person.gender}
 
 @app.get("/name-gender-dob")
 def read_name_and_gender_and_birthday():
-    person = FakePerson.create()
+    person = GeneratePerson.generate()
     return {"firstName": person.firstName, "lastName": person.lastName, "gender": person.gender, "birthDate": person.birthDate}
 
 @app.get("/cpr-name-gender")
 def read_cpr_name_and_gender():
-    person = FakePerson.create()
+    person = GeneratePerson.generate()
     return {"CPR": person.CPR, "firstName": person.firstName, "lastName": person.lastName, "gender": person.gender}
 
 @app.get("/cpr-name-gender-dob")
 def read_cpr_name_gender_birthdate():
-    person = FakePerson.create()
+    person = GeneratePerson.generate()
     return {"CPR": person.CPR, "firstName": person.firstName, "lastName": person.lastName, "gender": person.gender, "birthDate": person.birthDate}
 
 @app.get("/address")
 def read_address():
-    person = FakePerson.create()
+    person = GeneratePerson.generate()
     return {"address": person.address}
 
 @app.get("/phone")
 def read_phone():
-    person = FakePerson.create()
+    person = GeneratePerson.generate()
     return {"phoneNumber": person.phoneNumber}

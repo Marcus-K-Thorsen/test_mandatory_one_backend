@@ -3,26 +3,47 @@ from src.generators.generate_year import GenerateYear
 from src.generators.generate_month import GenerateMonth
 from src.generators.generate_day import GenerateDay
 
-DAY_CONF = {
-    "MONTHS_WITH_31_DAYS": [1, 3, 5, 7, 8, 10, 12],
-    "MONTHS_WITH_30_DAYS": [4, 6, 9, 11],
-    "MONTH_31_RANGE": (1, 31),
-    "MONTH_30_RANGE": (1, 30),
-    "MONTH_28_RANGE": (1, 28)
-}
-
 class GenerateBirthdate:
-    """Generate a random birthdate based on some predefined rules."""
+    """Generate a random birthdate based on year, month, and day."""
     
-    def __init__(self, yearRange: tuple, monthRange: tuple, dayConfiguration: dict = DAY_CONF):
-        # Rely on error handling from other classes
-        self.year = GenerateYear(yearRange).generate()
-        self.month = GenerateMonth(monthRange).generate()
-        self.day = GenerateDay(self.month, dayConfiguration).generate()
+    def __init__(self, year: int, month: int, day: int):
+        
+        if not year: 
+            raise ValueError("year is not provided.")
+        if not month: 
+            raise ValueError("month is not provided.")
+        if not day: 
+            raise ValueError("day is not provided.")
+        
+        if not isinstance(year, int):
+            raise TypeError(f"year must be of type int, but got {type(year).__name__}.")
+        if not isinstance(month, int):
+            raise TypeError(f"month must be of type int, but got {type(month).__name__}.")
+        if not isinstance(day, int):
+            raise TypeError(f"day must be of type int, but got {type(day).__name__}.")
+        
+        if not (1 <= year):
+            raise ValueError("year must be greater than 0.")
+        if not (1 <= month <= 12):
+            raise ValueError("month must be between 1 and 12.")
+        
+        if month in [1, 3, 5, 7, 8, 10, 12]:
+            if not (1 <= day <= 31):
+                raise ValueError("day must be between 1 and 31.")
+        elif month in [4, 6, 9, 11]:
+            if not (1 <= day <= 30):
+                raise ValueError("day must be between 1 and 30.")
+        else:
+            if not (1 <= day <= 28):
+                raise ValueError("day must be between 1 and 28.")
+        
+        self.year = year
+        self.month = month
+        self.day = day
 
     def generate(self):
-        y = self.year
-        m = self.month if self.month > 9 else f'0{self.month}'
-        d = self.day if self.day > 9 else f'0{self.day}'
-        
+        y = str(self.year).zfill(4)
+        m = str(self.month).zfill(2)
+        d = str(self.day).zfill(2)
+
         return f"{y}-{m}-{d}"

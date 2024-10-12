@@ -1,3 +1,9 @@
+#
+# This file should just be deleted when the last test is moved to their respective generator classes.
+# No methods from this file are used in the project besides in some test methods.
+#
+#
+
 import random
 import string
 import re
