@@ -87,7 +87,7 @@ class GeneratePerson:
         gender = GenerateGender(personList).generate()
         birthDate = GenerateBirthdate(year, month, day).generate()
         CPR = GenerateCPR(gender, {"day": day, "month": month, "year": year}).generate()
-        phoneNumber = GeneratePhoneNumber.generate()
+        phoneNumber = GeneratePhoneNumber().generate()
         address = GenerateAddress.generate(postalCodeList, townNameList)
 
         return GeneratePerson(options={
